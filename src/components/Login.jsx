@@ -1,11 +1,17 @@
 import { BG_IMG } from "../utils/constants";
 import { useState, useRef } from "react";
 import backendAPI from "../utils/api";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [isSignIn, setIsSignIn] = useState(true);
-    const [showError, setShowError] = useState(null);
+    const [showError, setShowError] = useState(null); //use it
 
     const name = useRef(null);
     const email = useRef(null);
@@ -16,21 +22,14 @@ const Login = () => {
     }
 
     const handleLogin = async () => {
-        console.log(email.current.value, password.current.value)
-        // const user = {
-        //     id: "123456",
-        //     name: "joker",
-        //     email: "joker@gmail.com",
-        //     role: "admin"
-        // }
         const res = await backendAPI.post('/auth/login', { email: email.current.value, password: password.current.value });
-        console.log("after call", res);
 
-        // if (user) {
-        //     //goto dashboard
-        // } else {
-        //     //show error
-        // }
+        if (res.data.user) {
+            dispatch(addUser({ user: res.data.user }));
+            navigate("/browse");
+        } else {
+            console.log(res.error);
+        }
     }
     return (
         <div className="login-page">
