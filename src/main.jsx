@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import Login from "./components/Login";
 import Browse from "./components/Browse";
+import Protected from "./components/Protected";
 
 createRoot(document.getElementById('root')).render(
   <Provider store={appStore}>
@@ -11,7 +12,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace></Navigate>}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/browse" element={<Browse />}></Route>
+        <Route path="/browse" element={<Protected><Browse /></Protected>}></Route>
       </Routes>
     </BrowserRouter>
   </Provider>
